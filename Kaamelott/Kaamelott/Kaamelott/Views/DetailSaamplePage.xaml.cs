@@ -1,4 +1,5 @@
-﻿using Kaamelott.ViewModels;
+﻿using Kaamelott.Models;
+using Kaamelott.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,12 @@ using Xamarin.Forms.Xaml;
 namespace Kaamelott.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ListSamplesPage : ContentPage
+    public partial class DetailSaamplePage : ContentPage
     {
-        public ListSamplesPage()
+        public DetailSaamplePage(Saample param)
         {
             InitializeComponent();
-            BindingContext = new ListSamplesViewModel();
+            BindingContext = new DetailSaampleViewModel(param);
         }
     }
 }

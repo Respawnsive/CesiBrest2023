@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Kaamelott.Views.DetailSaamplePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="Black">
+    <ContentPage.Content>
+        <Grid
+            Padding="20"
+            ColumnDefinitions="Auto, *"
+            RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+            
+            <Image
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="20"
+                Aspect="AspectFit"
+                HeightRequest="400"
+                HorizontalOptions="Center"
+                Source="{Binding CurrentSample.Imagefile}"
+                WidthRequest="400" />
+            
+            <!--  Personnage  -->
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="Title"
+                Text="Personnage :"
+                TextColor="White" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                FontAttributes="Bold"
+                FontSize="Title"
+                Text="{Binding CurrentSample.Character}"
+                TextColor="White" />
+
+            <!--  Tirade  -->
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="Title"
+                Text="Tirade :"
+                TextColor="White" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="1"
+                FontSize="Title"
+                LineBreakMode="TailTruncation"
+                MaxLines="3"
+                Text="{Binding CurrentSample.Title}"
+                TextColor="White" />
+
+            <!--  Boutons d'action  -->
+            <Grid
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                ColumnDefinitions="*,*">
+                <Button
+                    Grid.Column="0"
+                    Padding="20"
+                    Text="Jouer le MP3" />
+                <Button
+                    Grid.Column="1"
+                    Padding="20"
+                    Text="Jouer le TTS" />
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
