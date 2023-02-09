@@ -3,48 +3,57 @@
     x:Class="Kaamelott.Views.ListSamplesPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:Kaamelott.ViewModels">
+    xmlns:viewmodels="clr-namespace:Kaamelott.ViewModels"
+    BackgroundColor="Black">
     <ContentPage.BindingContext>
-        <vm:ListSamplesViewModel />
+        <viewmodels:ListSamplesViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout>
             <Image
                 Aspect="AspectFit"
-                HeightRequest="215"
-                Source="logo"
-                WidthRequest="440" />
+                HeightRequest="140"
+                Source="logo" />
             <CollectionView
                 HorizontalOptions="Fill"
                 ItemsSource="{Binding ListSaample}"
+                SelectionChangedCommand="{Binding ClickSaampleCommand}"
+                SelectedItem="{Binding SelectedSaample}"
+                SelectionMode="Single"
                 VerticalOptions="Fill">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
-                                <Image
-                                    Grid.Row="0"
-                                    Grid.RowSpan="2"
-                                    Grid.Column="0"
-                                    Aspect="AspectFit"
-                                    HeightRequest="40"
-                                    Source="{Binding Imagefile}"
-                                    WidthRequest="40" />
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    FontAttributes="Bold"
-                                    FontSize="Title"
-                                    Text="{Binding Character}" />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    FontSize="Medium"
-                                    LineBreakMode="TailTruncation"
-                                    MaxLines="3"
-                                    Text="{Binding Title}" />
-                            </Grid>
-                        </ViewCell>
+                        <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
+                            <Image
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                Margin="20"
+                                Aspect="AspectFit"
+                                HeightRequest="80"
+                                Source="{Binding Imagefile}"
+                                WidthRequest="80" />
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="10"
+                                FontAttributes="Bold"
+                                FontSize="Title"
+                                Text="{Binding Character}"
+                                TextColor="White" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="10"
+                                FontSize="Medium"
+                                LineBreakMode="TailTruncation"
+                                MaxLines="3"
+                                Text="{Binding Title}"
+                                TextColor="White" />
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

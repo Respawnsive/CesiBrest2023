@@ -7,11 +7,11 @@
         <Color x:Key="primaire">#F5F500</Color>
         <Color x:Key="secondaire">#00F500</Color>
 
-        <Style TargetType="Label">
+        <!--<Style TargetType="Label">
             <Setter Property="TextColor" Value="{StaticResource primaire}" />
             <Setter Property="FontSize" Value="Large" />
             <Setter Property="BackgroundColor" Value="LightGray" />
-        </Style>
+        </Style>-->
 
         <Style x:Key="MyLabelStyle" TargetType="Label">
             <Setter Property="TextColor" Value="{StaticResource secondaire}" />
