@@ -1,12 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kaamelott.Views.ListSamplesPage">
+<ContentPage
+    x:Class="Kaamelott.Views.ListSamplesPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Kaamelott.ViewModels">
+    <ContentPage.BindingContext>
+        <vm:ListSamplesViewModel />
+    </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Image
+                Aspect="AspectFit"
+                HeightRequest="215"
+                Source="logo"
+                WidthRequest="440" />
+            <CollectionView
+                HorizontalOptions="Fill"
+                ItemsSource="{Binding ListSaample}"
+                VerticalOptions="Fill">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
+                                <Image
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="0"
+                                    Aspect="AspectFit"
+                                    HeightRequest="40"
+                                    Source="{Binding Imagefile}"
+                                    WidthRequest="40" />
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontAttributes="Bold"
+                                    FontSize="Title"
+                                    Text="{Binding Character}" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    FontSize="Medium"
+                                    LineBreakMode="TailTruncation"
+                                    MaxLines="3"
+                                    Text="{Binding Title}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
