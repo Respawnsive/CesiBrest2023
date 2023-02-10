@@ -10,6 +10,15 @@
                 Aspect="AspectFit"
                 HeightRequest="140"
                 Source="logo" />
+            <Grid BackgroundColor="#F5F5F5" ColumnDefinitions="*,*" RowDefinitions="Auto">
+                <Entry
+                    Grid.Column="0"
+                    Placeholder="Filtrer..."
+                    Text="{Binding SearchedText}" />
+                <Picker ItemsSource="{Binding ListCharacters}"
+                        SelectedItem="{Binding SelectedFilterCharacter}"
+                        Grid.Column="1"/>
+            </Grid>
             <CollectionView
                 HorizontalOptions="Fill"
                 ItemsSource="{Binding ListSaample}"
