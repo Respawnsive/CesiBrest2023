@@ -1,24 +1,21 @@
 ﻿using Kaamelott.Models;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Kaamelott.ViewModels
 {
-    public class DetailSaampleViewModel
+    public class DetailSaampleViewModel : ReactiveObject
     {
         public DetailSaampleViewModel(Saample param)
         {
             CurrentSample = param;
         }
 
-        private Saample currentSample;
-
-        public Saample CurrentSample
-        {
-            get { return currentSample; }
-            set { currentSample = value; }
-        }
+        [Reactive]
+        public Saample CurrentSample { get; set; }
 
     }
 }

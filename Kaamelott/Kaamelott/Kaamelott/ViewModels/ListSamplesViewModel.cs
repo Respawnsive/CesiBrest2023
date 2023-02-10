@@ -1,4 +1,6 @@
 ﻿using Kaamelott.Models;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +11,7 @@ using Xamarin.Forms;
 
 namespace Kaamelott.ViewModels
 {
-    public  class ListSamplesViewModel
+    public  class ListSamplesViewModel : ReactiveObject
     {
         public ListSamplesViewModel()
         {
@@ -34,25 +36,11 @@ namespace Kaamelott.ViewModels
             ClickSaampleCommand = new Command(ExecuteSaample, CanExecuteSaample);
         }
 
-        private ObservableCollection<Saample> listSaample;
-        public ObservableCollection<Saample> ListSaample
-        {
-            get
-            {
-                return listSaample;
-            }
-            set
-            {
-                listSaample = value;
-            }
-        }
+        [Reactive]
+        public ObservableCollection<Saample> ListSaample { get; set; }
 
-        private Saample selectedSaample;
-        public Saample SelectedSaample
-        {
-            get { return selectedSaample; }
-            set { selectedSaample = value; }
-        }
+        [Reactive]
+        public Saample SelectedSaample { get; set; }
 
 
         public ICommand ClickSaampleCommand { get; set; }

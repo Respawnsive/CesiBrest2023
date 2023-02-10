@@ -6,15 +6,15 @@
     BackgroundColor="Black">
     <ContentPage.Content>
         <StackLayout>
-            <Image
+            <Image x:Name="Img_logo"
                 Aspect="AspectFit"
                 HeightRequest="140"
                 Source="logo" />
             <CollectionView
                 HorizontalOptions="Fill"
                 ItemsSource="{Binding ListSaample}"
-                SelectionChangedCommand="{Binding ClickSaampleCommand}"
                 SelectedItem="{Binding SelectedSaample}"
+                SelectionChangedCommand="{Binding ClickSaampleCommand}"
                 SelectionMode="Single"
                 VerticalOptions="Fill">
                 <CollectionView.ItemsLayout>
@@ -53,6 +53,12 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <Label
+                Margin="10"
+                FontAttributes="Bold"
+                FontSize="Title"
+                Text="{Binding SelectedSaample.Character}"
+                TextColor="White" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
