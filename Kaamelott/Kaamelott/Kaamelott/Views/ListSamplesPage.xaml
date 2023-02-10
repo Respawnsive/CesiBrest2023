@@ -3,6 +3,7 @@
     x:Class="Kaamelott.Views.ListSamplesPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="La liste des Saamples"
     BackgroundColor="Black">
     <ContentPage.Content>
         <StackLayout>
@@ -10,14 +11,27 @@
                 Aspect="AspectFit"
                 HeightRequest="140"
                 Source="logo" />
-            <Grid BackgroundColor="#F5F5F5" ColumnDefinitions="*,*" RowDefinitions="Auto">
+            <Grid
+                BackgroundColor="#F5F5F5"
+                ColumnDefinitions="*,*,Auto"
+                RowDefinitions="Auto">
                 <Entry
                     Grid.Column="0"
                     Placeholder="Filtrer..."
                     Text="{Binding SearchedText}" />
-                <Picker ItemsSource="{Binding ListCharacters}"
-                        SelectedItem="{Binding SelectedFilterCharacter}"
-                        Grid.Column="1"/>
+                <Picker
+                    Title="Choisir Perso..."
+                    Grid.Column="1"
+                    ItemsSource="{Binding ListCharacters}"
+                    SelectedItem="{Binding SelectedFilterCharacter}" />
+                <ImageButton
+                    Grid.Column="2"
+                    Padding="10"
+                    BackgroundColor="Black"
+                    Command="{Binding ClearFilterCommand}"
+                    HeightRequest="48"
+                    Source="clear"
+                    WidthRequest="48" />
             </Grid>
             <CollectionView
                 HorizontalOptions="Fill"
@@ -31,10 +45,13 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
+                        <Grid
+                            BackgroundColor="{Binding Character, Converter={StaticResource CharacterToColorConverter}}"
+                            ColumnDefinitions="Auto, *"
+                            RowDefinitions="Auto, Auto, Auto">
                             <Image
                                 Grid.Row="0"
-                                Grid.RowSpan="2"
+                                Grid.RowSpan="3"
                                 Grid.Column="0"
                                 Margin="20"
                                 Aspect="AspectFit"
@@ -57,6 +74,14 @@
                                 LineBreakMode="TailTruncation"
                                 MaxLines="3"
                                 Text="{Binding Title}"
+                                TextColor="White" />
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="10"
+                                FontSize="Default"
+                                HorizontalTextAlignment="Start"
+                                Text="{Binding Episode}"
                                 TextColor="White" />
                         </Grid>
                     </DataTemplate>

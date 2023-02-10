@@ -12,7 +12,7 @@ namespace Kaamelott
         {
             InitializeComponent();
 
-            MainPage = new ListSamplesPage();
+            MainPage = new NavigationPage(new ListSamplesPage());
 
             //MainPage = new DetailSaamplePage(new Saample
             //{

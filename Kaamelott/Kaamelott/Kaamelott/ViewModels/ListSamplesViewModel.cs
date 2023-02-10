@@ -10,18 +10,25 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System.Linq;
+using Xamarin.Forms.PlatformConfiguration;
+using Kaamelott.Views;
 
 namespace Kaamelott.ViewModels
 {
     public  class ListSamplesViewModel : ReactiveObject
     {
         private List<Saample> AllSamples;
+        private INavigation NavigationService;
 
-        public ListSamplesViewModel()
+        public ListSamplesViewModel(INavigation navigationService)
         {
+            NavigationService = navigationService;
             ListSaample = new ObservableCollection<Saample>();
 
             ClickSaampleCommand = new Command(ExecuteSaample, CanExecuteSaample);
+
+            ClearFilterCommand = new Command(ClearFilters, CanClearFilters);
+
             LoadSamples();
 
             this.WhenAnyValue(x => x.SearchedText)
@@ -57,14 +64,32 @@ namespace Kaamelott.ViewModels
 
         private void ExecuteSaample()
         {
-            //Logique
-            var audioService = DependencyService.Get<IAudioService>();
-            audioService.PlayMP3(SelectedSaample.File);
+            //Naviguer vers la page 2
+            NavigationService.PushAsync(new DetailSaamplePage(SelectedSaample));
+            SelectedSaample = null;
         }
 
         private bool CanExecuteSaample()
         {
             return SelectedSaample != null;
+        }
+
+
+        public ICommand ClearFilterCommand { get; set; }
+
+        private void ClearFilters()
+        {
+            SearchedText = null;
+            SelectedFilterCharacter = null;
+        }
+
+        private bool CanClearFilters()
+        {
+            if (!String.IsNullOrWhiteSpace(SearchedText) || SelectedFilterCharacter != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         #endregion
@@ -109,6 +134,8 @@ namespace Kaamelott.ViewModels
             }
 
             ListSaample = new ObservableCollection<Saample>(filteredsamples);
+
+            ((Command)ClearFilterCommand).ChangeCanExecute();
 
         }
 

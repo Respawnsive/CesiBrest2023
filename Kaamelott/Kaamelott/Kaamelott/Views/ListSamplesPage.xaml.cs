@@ -16,7 +16,8 @@ namespace Kaamelott.Views
         public ListSamplesPage()
         {
             InitializeComponent();
-            BindingContext = new ListSamplesViewModel();
+            BindingContext = new ListSamplesViewModel(Navigation);
+
         }
     }
 }

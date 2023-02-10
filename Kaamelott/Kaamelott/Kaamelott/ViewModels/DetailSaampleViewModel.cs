@@ -17,5 +17,9 @@ namespace Kaamelott.ViewModels
         [Reactive]
         public Saample CurrentSample { get; set; }
 
+        ////Logique
+        //var audioService = DependencyService.Get<IAudioService>();
+        //audioService.PlayMP3(SelectedSaample.File);
+
     }
 }

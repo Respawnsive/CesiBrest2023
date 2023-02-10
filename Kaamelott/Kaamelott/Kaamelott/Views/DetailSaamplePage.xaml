@@ -3,13 +3,14 @@
     x:Class="Kaamelott.Views.DetailSaamplePage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    BackgroundColor="Black">
+    Title="{Binding CurrentSample.Character, StringFormat='Détail du saample de {0}'}"
+    BackgroundColor="{Binding CurrentSample.Character, Converter={StaticResource CharacterToColorConverter}}">
     <ContentPage.Content>
         <Grid
             Padding="20"
             ColumnDefinitions="Auto, *"
             RowDefinitions="Auto, Auto, Auto, Auto, Auto">
-            
+
             <Image
                 Grid.Row="0"
                 Grid.Column="0"
@@ -20,7 +21,7 @@
                 HorizontalOptions="Center"
                 Source="{Binding CurrentSample.Imagefile}"
                 WidthRequest="400" />
-            
+
             <!--  Personnage  -->
             <Label
                 Grid.Row="1"
