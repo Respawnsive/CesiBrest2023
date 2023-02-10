@@ -17,24 +17,24 @@
                 Grid.ColumnSpan="2"
                 Margin="20"
                 Aspect="AspectFit"
-                HeightRequest="400"
+                HeightRequest="120"
                 HorizontalOptions="Center"
                 Source="{Binding CurrentSample.Imagefile}"
-                WidthRequest="400" />
+                WidthRequest="120" />
 
             <!--  Personnage  -->
             <Label
                 Grid.Row="1"
                 Grid.Column="0"
                 FontAttributes="Bold"
-                FontSize="Title"
+                FontSize="Medium"
                 Text="Personnage :"
                 TextColor="White" />
             <Label
                 Grid.Row="1"
                 Grid.Column="1"
                 FontAttributes="Bold"
-                FontSize="Title"
+                FontSize="Medium"
                 Text="{Binding CurrentSample.Character}"
                 TextColor="White" />
 
@@ -43,13 +43,13 @@
                 Grid.Row="2"
                 Grid.Column="0"
                 FontAttributes="Bold"
-                FontSize="Title"
+                FontSize="Medium"
                 Text="Tirade :"
                 TextColor="White" />
             <Label
                 Grid.Row="2"
                 Grid.Column="1"
-                FontSize="Title"
+                FontSize="Medium"
                 LineBreakMode="TailTruncation"
                 MaxLines="3"
                 Text="{Binding CurrentSample.Title}"
@@ -64,10 +64,12 @@
                 <Button
                     Grid.Column="0"
                     Padding="20"
+                    Command="{Binding PlayMP3Command}"
                     Text="Jouer le MP3" />
                 <Button
                     Grid.Column="1"
                     Padding="20"
+                    Command="{Binding PlayTTSCommand}"
                     Text="Jouer le TTS" />
             </Grid>
         </Grid>

@@ -12,21 +12,32 @@
                 HeightRequest="140"
                 Source="logo" />
             <Grid
+                Padding="5"
                 BackgroundColor="#F5F5F5"
                 ColumnDefinitions="*,*,Auto"
-                RowDefinitions="Auto">
+                RowDefinitions="Auto, Auto">
                 <Entry
+                    Grid.Row="0"
                     Grid.Column="0"
+                    Grid.ColumnSpan="2"
                     Placeholder="Filtrer..."
                     Text="{Binding SearchedText}" />
                 <Picker
                     Title="Choisir Perso..."
-                    Grid.Column="1"
+                    Grid.Row="1"
+                    Grid.Column="0"
                     ItemsSource="{Binding ListCharacters}"
                     SelectedItem="{Binding SelectedFilterCharacter}" />
+                <Picker
+                    Title="Choisir Episode..."
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    ItemsSource="{Binding ListEpisodes}"
+                    SelectedItem="{Binding SelectedFilterEpisode}" />
                 <ImageButton
+                    Grid.RowSpan="2"
                     Grid.Column="2"
-                    Padding="10"
+                    Margin="5"
                     BackgroundColor="Black"
                     Command="{Binding ClearFilterCommand}"
                     HeightRequest="48"
@@ -41,35 +52,33 @@
                 SelectionMode="Single"
                 VerticalOptions="Fill">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                    <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid
+                            Padding="10"
                             BackgroundColor="{Binding Character, Converter={StaticResource CharacterToColorConverter}}"
                             ColumnDefinitions="Auto, *"
-                            RowDefinitions="Auto, Auto, Auto">
+                            RowDefinitions="Auto, Auto, Auto, Auto">
                             <Image
                                 Grid.Row="0"
                                 Grid.RowSpan="3"
                                 Grid.Column="0"
-                                Margin="20"
                                 Aspect="AspectFit"
-                                HeightRequest="80"
+                                HeightRequest="60"
                                 Source="{Binding Imagefile}"
-                                WidthRequest="80" />
+                                WidthRequest="60" />
                             <Label
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Margin="10"
                                 FontAttributes="Bold"
-                                FontSize="Title"
+                                FontSize="Medium"
                                 Text="{Binding Character}"
                                 TextColor="White" />
                             <Label
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Margin="10"
                                 FontSize="Medium"
                                 LineBreakMode="TailTruncation"
                                 MaxLines="3"
@@ -78,11 +87,16 @@
                             <Label
                                 Grid.Row="2"
                                 Grid.Column="1"
-                                Margin="10"
-                                FontSize="Default"
+                                FontSize="Small"
                                 HorizontalTextAlignment="Start"
                                 Text="{Binding Episode}"
                                 TextColor="White" />
+                            <BoxView
+                                Grid.Row="3"
+                                Grid.ColumnSpan="2"
+                                BackgroundColor="White"
+                                HeightRequest="2"
+                                HorizontalOptions="FillAndExpand" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

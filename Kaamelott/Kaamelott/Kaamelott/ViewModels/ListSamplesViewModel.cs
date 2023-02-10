@@ -32,10 +32,13 @@ namespace Kaamelott.ViewModels
             LoadSamples();
 
             this.WhenAnyValue(x => x.SearchedText)
-                .Subscribe(x => FilterSaamples(x, SelectedFilterCharacter));
+                .Subscribe(x => FilterSaamples(x, SelectedFilterCharacter, SelectedFilterEpisode));
 
             this.WhenAnyValue(x => x.SelectedFilterCharacter)
-                .Subscribe(x => FilterSaamples(SearchedText, x));
+                .Subscribe(x => FilterSaamples(SearchedText, x, SelectedFilterEpisode));
+
+            this.WhenAnyValue(x => x.SelectedFilterEpisode)
+                .Subscribe(x => FilterSaamples(SearchedText, SelectedFilterCharacter, x));
         }
 
         #region Bindable Properties (Reactive)
@@ -54,6 +57,12 @@ namespace Kaamelott.ViewModels
 
         [Reactive]
         public string SelectedFilterCharacter { get; set; }
+
+        [Reactive]
+        public List<string> ListEpisodes { get; set; }
+
+        [Reactive]
+        public string SelectedFilterEpisode { get; set; }
 
         #endregion
 
@@ -81,11 +90,14 @@ namespace Kaamelott.ViewModels
         {
             SearchedText = null;
             SelectedFilterCharacter = null;
+            SelectedFilterEpisode = null;
         }
 
         private bool CanClearFilters()
         {
-            if (!String.IsNullOrWhiteSpace(SearchedText) || SelectedFilterCharacter != null)
+            if (!String.IsNullOrWhiteSpace(SearchedText) 
+                || SelectedFilterCharacter != null
+                || SelectedFilterEpisode != null)
             {
                 return true;
             }
@@ -109,33 +121,39 @@ namespace Kaamelott.ViewModels
                                         .Distinct()
                                         .OrderBy(x => x)
                                         .ToList();
+            ListEpisodes = AllSamples.Select(x => x.Episode)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToList();
             //ListCharacters = 
-            FilterSaamples("", "");
+            FilterSaamples("", "", "");
         }
 
-        private void FilterSaamples(string searchedText, string searchedCharacter)
+        private void FilterSaamples(string searchedText, string searchedCharacter, string searchedEpisode)
         {
             //logique de filtre
             var filteredsamples = AllSamples;
 
-            if (!String.IsNullOrWhiteSpace(searchedText) && String.IsNullOrWhiteSpace(searchedCharacter))
+            //Filtrer avec Linq
+            if (!String.IsNullOrWhiteSpace(searchedText))
             {
-                //Filtrer avec Linq
-                filteredsamples = AllSamples.Where(x => x.Title.ToLower().Contains(searchedText.ToLower())).ToList();
+                filteredsamples = filteredsamples.Where(x => x.Title.ToLower().Contains(searchedText.ToLower())).ToList();
             }
-            else if (String.IsNullOrWhiteSpace(searchedText) && !String.IsNullOrWhiteSpace(searchedCharacter))
+            
+            if (!String.IsNullOrWhiteSpace(searchedCharacter))
             {
-                filteredsamples = AllSamples.Where(x => x.Character == searchedCharacter).ToList();
+                filteredsamples = filteredsamples.Where(x => x.Character == searchedCharacter).ToList();
             }
-            else if (!String.IsNullOrWhiteSpace(searchedText) && !String.IsNullOrWhiteSpace(searchedCharacter))
+            
+            if (!String.IsNullOrWhiteSpace(searchedEpisode))
             {
-                filteredsamples = AllSamples.Where(x => x.Title.ToLower().Contains(searchedText.ToLower()) 
-                                                    && x.Character == searchedCharacter).ToList();
+                filteredsamples = filteredsamples.Where(x => x.Episode == searchedEpisode).ToList();
             }
+            
 
             ListSaample = new ObservableCollection<Saample>(filteredsamples);
 
-            ((Command)ClearFilterCommand).ChangeCanExecute();
+            ((Command)ClearFilterCommand)?.ChangeCanExecute();
 
         }
 
