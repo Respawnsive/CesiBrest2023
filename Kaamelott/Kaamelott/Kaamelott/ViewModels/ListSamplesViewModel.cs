@@ -34,7 +34,8 @@ namespace Kaamelott.ViewModels
         private void ExecuteSaample()
         {
             //Logique
-
+            var audioService = DependencyService.Get<IAudioService>();
+            audioService.PlayMP3(SelectedSaample.File);
         }
 
         private bool CanExecuteSaample()
