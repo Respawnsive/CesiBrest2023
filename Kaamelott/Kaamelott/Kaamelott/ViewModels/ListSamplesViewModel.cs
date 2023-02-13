@@ -12,33 +12,46 @@ using Xamarin.Forms;
 using System.Linq;
 using Xamarin.Forms.PlatformConfiguration;
 using Kaamelott.Views;
+using Kaamelott.Services;
+using Microsoft.AppCenter.Crashes;
 
 namespace Kaamelott.ViewModels
 {
     public  class ListSamplesViewModel : ReactiveObject
     {
-        private List<Saample> AllSamples;
+        private List<Saample> AllSamples = new List<Saample>();
         private INavigation NavigationService;
 
         public ListSamplesViewModel(INavigation navigationService)
         {
-            NavigationService = navigationService;
-            ListSaample = new ObservableCollection<Saample>();
+            try
+            {
+                NavigationService = navigationService;
+                ListSaample = new ObservableCollection<Saample>();
 
-            ClickSaampleCommand = new Command(ExecuteSaample, CanExecuteSaample);
+                RefreshCommand = new Command(LoadSamples);
 
-            ClearFilterCommand = new Command(ClearFilters, CanClearFilters);
+                RefreshCommandAsync = new Command(async() => await LoadSamplesAsync());
 
-            LoadSamples();
+                ClickSaampleCommand = new Command(ExecuteSaample, CanExecuteSaample);
 
-            this.WhenAnyValue(x => x.SearchedText)
-                .Subscribe(x => FilterSaamples(x, SelectedFilterCharacter, SelectedFilterEpisode));
+                ClearFilterCommand = new Command(ClearFilters, CanClearFilters);
 
-            this.WhenAnyValue(x => x.SelectedFilterCharacter)
-                .Subscribe(x => FilterSaamples(SearchedText, x, SelectedFilterEpisode));
+                //LoadSamples();
 
-            this.WhenAnyValue(x => x.SelectedFilterEpisode)
-                .Subscribe(x => FilterSaamples(SearchedText, SelectedFilterCharacter, x));
+                this.WhenAnyValue(x => x.SearchedText)
+                    .Subscribe(x => FilterSaamples(x, SelectedFilterCharacter, SelectedFilterEpisode));
+
+                this.WhenAnyValue(x => x.SelectedFilterCharacter)
+                    .Subscribe(x => FilterSaamples(SearchedText, x, SelectedFilterEpisode));
+
+                this.WhenAnyValue(x => x.SelectedFilterEpisode)
+                    .Subscribe(x => FilterSaamples(SearchedText, SelectedFilterCharacter, x));
+            }
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
         }
 
         #region Bindable Properties (Reactive)
@@ -63,6 +76,9 @@ namespace Kaamelott.ViewModels
 
         [Reactive]
         public string SelectedFilterEpisode { get; set; }
+
+        [Reactive]
+        public bool IsBusy { get; set; }
 
         #endregion
 
@@ -104,6 +120,12 @@ namespace Kaamelott.ViewModels
             return false;
         }
 
+
+        public ICommand RefreshCommand { get; set; }
+
+        public ICommand RefreshCommandAsync { get; set; }
+
+
         #endregion
 
 
@@ -114,6 +136,9 @@ namespace Kaamelott.ViewModels
         /// </summary>
         private void LoadSamples()
         {
+            IsBusy = true;
+
+            //Données locales
             var dataService = DependencyService.Get<IDataService>();
             var listsamples = dataService.GetSaamplesFromLocal();
             AllSamples = listsamples;
@@ -127,34 +152,68 @@ namespace Kaamelott.ViewModels
                             .ToList();
             //ListCharacters = 
             FilterSaamples("", "", "");
+
+            IsBusy = false;
         }
+
+        private async Task LoadSamplesAsync()
+        {
+            //Données API
+            
+            IsBusy = true;
+
+            ApiService apiClient = new ApiService();
+            var listsamples = await apiClient.GetSaamplesFromApiAsync();
+
+            //
+            AllSamples = listsamples;
+            ListCharacters = AllSamples.Select(x => x.Character)
+                                        .Distinct()
+                                        .OrderBy(x => x)
+                                        .ToList();
+            ListEpisodes = AllSamples.Select(x => x.Episode)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToList();
+            //ListCharacters = 
+            FilterSaamples("", "", "");
+
+            IsBusy = false;
+        }
+
 
         private void FilterSaamples(string searchedText, string searchedCharacter, string searchedEpisode)
         {
-            //logique de filtre
-            var filteredsamples = AllSamples;
-
-            //Filtrer avec Linq
-            if (!String.IsNullOrWhiteSpace(searchedText))
+            try
             {
-                filteredsamples = filteredsamples.Where(x => x.Title.ToLower().Contains(searchedText.ToLower())).ToList();
+                //logique de filtre
+                var filteredsamples = AllSamples;
+
+                //Filtrer avec Linq
+                if (!String.IsNullOrWhiteSpace(searchedText))
+                {
+                    filteredsamples = filteredsamples.Where(x => x.Title.ToLower().Contains(searchedText.ToLower())).ToList();
+                }
+
+                if (!String.IsNullOrWhiteSpace(searchedCharacter))
+                {
+                    filteredsamples = filteredsamples.Where(x => x.Character == searchedCharacter).ToList();
+                }
+
+                if (!String.IsNullOrWhiteSpace(searchedEpisode))
+                {
+                    filteredsamples = filteredsamples.Where(x => x.Episode == searchedEpisode).ToList();
+                }
+
+
+                ListSaample = new ObservableCollection<Saample>(filteredsamples);
+
+                ((Command)ClearFilterCommand)?.ChangeCanExecute();
             }
-            
-            if (!String.IsNullOrWhiteSpace(searchedCharacter))
+            catch(Exception ex)
             {
-                filteredsamples = filteredsamples.Where(x => x.Character == searchedCharacter).ToList();
+                Crashes.TrackError(ex);
             }
-            
-            if (!String.IsNullOrWhiteSpace(searchedEpisode))
-            {
-                filteredsamples = filteredsamples.Where(x => x.Episode == searchedEpisode).ToList();
-            }
-            
-
-            ListSaample = new ObservableCollection<Saample>(filteredsamples);
-
-            ((Command)ClearFilterCommand)?.ChangeCanExecute();
-
         }
 
         #endregion

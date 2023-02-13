@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Kaamelott.Droid.Services;
 using Kaamelott.Interfaces;
+using Microsoft.AppCenter.Crashes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,15 +21,22 @@ namespace Kaamelott.Droid.Services
     {
         public void PlayMP3(string filename)
         {
-            //Comment jouer un MP3 sur android (natif android)
-            var filedesc = Android.App.Application.Context.Assets.OpenFd("mp3/" + filename);
-            var player = new MediaPlayer();
-            player.Prepared += (sender, arg) =>
+            try
             {
-                player.Start();
-            };
-            player.SetDataSource(filedesc);
-            player.Prepare();
+                //Comment jouer un MP3 sur android (natif android)
+                var filedesc = Android.App.Application.Context.Assets.OpenFd("mp3/" + filename);
+                var player = new MediaPlayer();
+                player.Prepared += (sender, arg) =>
+                {
+                    player.Start();
+                };
+                player.SetDataSource(filedesc);
+                player.Prepare();
+            }
+            catch(Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ using Xamarin.Forms;
 using Xamarin.Essentials;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter.Analytics;
 
 namespace Kaamelott.ViewModels
 {
@@ -37,10 +39,13 @@ namespace Kaamelott.ViewModels
             {
                 var audioService = DependencyService.Get<IAudioService>();
                 audioService.PlayMP3(CurrentSample.File);
+
+                Analytics.TrackEvent("MP3 joué : " + CurrentSample.File);
             }
             catch(Exception ex)
             {
                 //Logguer ou gérer l'erreur (affichant un message ?)
+                Crashes.TrackError(ex);
 
             }
         }
@@ -70,11 +75,13 @@ namespace Kaamelott.ViewModels
                     options.Locale = Targetlocal;
 
                 await TextToSpeech.SpeakAsync(CurrentSample.Title);
+
+                Analytics.TrackEvent("TTS joué : " + CurrentSample.Title);
             }
             catch(Exception ex)
             {
                 //Logguer ou gérer l'erreur (affichant un message ?)
-
+                Crashes.TrackError(ex);
             }
         }
 

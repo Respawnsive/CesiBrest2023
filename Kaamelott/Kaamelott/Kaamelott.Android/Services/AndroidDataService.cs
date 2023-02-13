@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.Json;
 using Xamarin.Forms;
 using Kaamelott.Droid.Services;
+using System.Threading;
 
 [assembly:Dependency(typeof(AndroidDataService))]
 namespace Kaamelott.Droid.Services
@@ -28,6 +29,9 @@ namespace Kaamelott.Droid.Services
             StreamReader SR = new StreamReader(stream);
             string databruts = SR.ReadToEnd();
             SR.Close();
+
+            //Fake long loading
+            //Thread.Sleep(5000);
 
             //Caster le contenu string en List<Saample>
             var result = JsonSerializer.Deserialize<List<Saample>>(databruts);
