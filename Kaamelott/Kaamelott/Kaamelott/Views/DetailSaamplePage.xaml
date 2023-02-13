@@ -18,7 +18,7 @@
             ColumnDefinitions="Auto, *"
             RowDefinitions="Auto, Auto, Auto, Auto, Auto">
 
-            <Image
+            <Image x:Name="img_char"
                 Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
@@ -85,7 +85,7 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 ColumnDefinitions="*,*">
-                <Button
+                <Button x:Name="btn_mp3"
                     Grid.Column="0"
                     Padding="20"
                     Command="{Binding PlayMP3Command}"

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Analytics;
+using Acr.UserDialogs;
 
 namespace Kaamelott.ViewModels
 {
@@ -82,6 +83,8 @@ namespace Kaamelott.ViewModels
             {
                 //Logguer ou gérer l'erreur (affichant un message ?)
                 Crashes.TrackError(ex);
+                await UserDialogs.Instance.AlertAsync("Ce téléphone ne supporte pas le TextToSpeech. Installez GooglePlayServices !",
+                    "Erreur TTS", "Ok");
             }
         }
 
