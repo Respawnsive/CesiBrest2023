@@ -13,15 +13,6 @@ namespace Kaamelott
             InitializeComponent();
 
             MainPage = new NavigationPage(new ListSamplesPage());
-
-            //MainPage = new DetailSaamplePage(new Saample
-            //{
-            //    Title = "Interprète",
-            //    Character = "Arthur - Le Roi Burgonde",
-            //    Episode = "Livre II, 03 - Le Dialogue de Paix",
-            //    File = "interprete.mp3",
-            //    Imagefile = "arthurleroiburgonde.png"
-            //}); 
         }
 
         protected override void OnStart()

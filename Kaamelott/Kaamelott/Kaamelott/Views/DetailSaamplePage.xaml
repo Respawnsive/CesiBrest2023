@@ -5,6 +5,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="{Binding CurrentSample.Character, StringFormat='Détail du saample de {0}'}"
     BackgroundColor="{Binding CurrentSample.Character, Converter={StaticResource CharacterToColorConverter}}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ShareCommand}"
+            IconImageSource="ic_share_white"
+            Order="Primary"
+            Text="Partager" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid
             Padding="20"
@@ -55,9 +62,26 @@
                 Text="{Binding CurrentSample.Title}"
                 TextColor="White" />
 
+            <!--  Episode  -->
+            <Label
+                Grid.Row="3"
+                Grid.Column="0"
+                FontAttributes="Bold"
+                FontSize="Medium"
+                Text="Episode :"
+                TextColor="White" />
+            <Label
+                Grid.Row="3"
+                Grid.Column="1"
+                FontSize="Medium"
+                LineBreakMode="TailTruncation"
+                MaxLines="3"
+                Text="{Binding CurrentSample.Episode}"
+                TextColor="White" />
+
             <!--  Boutons d'action  -->
             <Grid
-                Grid.Row="3"
+                Grid.Row="4"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 ColumnDefinitions="*,*">

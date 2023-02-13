@@ -21,6 +21,7 @@ namespace Kaamelott.ViewModels
 
             PlayMP3Command = new Command(PlayMP3, CanPlayMP3);
             PlayTTSCommand = new Command(async() => await PlayTTS(), CanPlayTTS);
+            ShareCommand = new Command(async () => await ShareSaample(), CanShareSaample);
         }
 
         [Reactive]
@@ -32,8 +33,16 @@ namespace Kaamelott.ViewModels
 
         private void PlayMP3()
         {
-            var audioService = DependencyService.Get<IAudioService>();
-            audioService.PlayMP3(CurrentSample.File);
+            try
+            {
+                var audioService = DependencyService.Get<IAudioService>();
+                audioService.PlayMP3(CurrentSample.File);
+            }
+            catch(Exception ex)
+            {
+                //Logguer ou gérer l'erreur (affichant un message ?)
+
+            }
         }
 
         private bool CanPlayMP3()
@@ -46,22 +55,45 @@ namespace Kaamelott.ViewModels
 
         private async Task PlayTTS()
         {
-            var listLocal = await TextToSpeech.GetLocalesAsync();
-            var Targetlocal = listLocal.FirstOrDefault();
-            var canadian = listLocal.Where(x => x.Country == "CA").FirstOrDefault();
+            try
+            {
+                var listLocal = await TextToSpeech.GetLocalesAsync();
+                var Targetlocal = listLocal.FirstOrDefault();
+                var canadian = listLocal.Where(x => x.Country == "CA").FirstOrDefault();
 
-            var options = new SpeechOptions();
-            options.Pitch = 2;
-            options.Volume = 1;
-            if (canadian != null)
-                options.Locale = canadian;
-            else
-                options.Locale = Targetlocal;
+                var options = new SpeechOptions();
+                options.Pitch = 2;
+                options.Volume = 1;
+                if (canadian != null)
+                    options.Locale = canadian;
+                else
+                    options.Locale = Targetlocal;
 
-            await TextToSpeech.SpeakAsync(CurrentSample.Title);
+                await TextToSpeech.SpeakAsync(CurrentSample.Title);
+            }
+            catch(Exception ex)
+            {
+                //Logguer ou gérer l'erreur (affichant un message ?)
+
+            }
         }
 
         private bool CanPlayTTS()
+        {
+            return !String.IsNullOrWhiteSpace(CurrentSample.Title);
+        }
+
+
+        public ICommand ShareCommand { get; set; }
+
+        private async Task ShareSaample()
+        {
+            ShareTextRequest request = new ShareTextRequest(CurrentSample.Title, "Partage d'un sample de Kaamlott");
+            request.Uri = "http://google.fr";
+            await Share.RequestAsync(request);
+        }
+
+        private bool CanShareSaample()
         {
             return !String.IsNullOrWhiteSpace(CurrentSample.Title);
         }
